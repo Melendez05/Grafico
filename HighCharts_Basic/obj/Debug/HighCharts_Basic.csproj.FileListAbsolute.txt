@@ -15,3 +15,4 @@ E:\HighCharts_Basic\HighCharts_Basic\bin\HighCharts_Basic.dll
 E:\HighCharts_Basic\HighCharts_Basic\bin\HighCharts_Basic.pdb
 E:\HighCharts_Basic\HighCharts_Basic\obj\Debug\HighCharts_Basic.dll
 E:\HighCharts_Basic\HighCharts_Basic\obj\Debug\HighCharts_Basic.pdb
+E:\HighCharts_Basic\HighCharts_Basic\obj\Debug\HighCharts_Basic.csprojResolveAssemblyReference.cache

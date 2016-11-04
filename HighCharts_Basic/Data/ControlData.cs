@@ -33,7 +33,7 @@ namespace HighCharts_Basic.Data
             //Abrimos la conexión
             sqlConn.Open();
             //Llamamos al procedimiento almacenado
-            SqlCommand cmd = new SqlCommand("infoGrafico", sqlConn);
+            SqlCommand cmd = new SqlCommand("informacionGrafico", sqlConn);
             //Configuramos el tipo
             cmd.CommandType = CommandType.StoredProcedure;
             //Objeto data reader
@@ -41,51 +41,27 @@ namespace HighCharts_Basic.Data
             string infor = "";
             while (objReader.Read())
             {
-                infor += objReader.GetString(0) + "," + objReader.GetInt32(1) + ";";
+                infor += objReader.GetInt32(0) + "," + objReader.GetInt32(1) + ";";
             }
             sqlConn.Close();
-            return infor;
+            return informacionGrafico(infor);
         }
 
 
-        public string informacionGrafico()
+        public string informacionGrafico(string information)
         {
-            //Simular información de los controles
-            ArrayList controles = new ArrayList();
-            ArrayList mesAsignado = new ArrayList();
-            ArrayList periodos = new ArrayList();
-            periodos.Add("3");
-            periodos.Add("2");
-            periodos.Add("1");
-            Random rnd = new Random();
-            for (int i = 0; i < 32; i++)
+
+            String[] informacion = information.Split(';');
+                       
+            for (int j = 0; j < informacion.Length; j++)
             {
-                if (i % 2 == 0)
-                {
-                    mesAsignado.Add(rnd.Next(1, 12));
-                    mesAsignado.Add(rnd.Next(1, 12));
-                    controles.Add(periodos[0]);
-                    controles.Add(periodos[2]);
-                }
-                else
-                {
-                    controles.Add(periodos[1]);
-                    mesAsignado.Add(rnd.Next(1, 12));
-                }
-            }
-            //--------------------------------------
-
-
-
-            for (int j = 0; j < controles.Count; j++)
-            {
-
-                if (controles[j].Equals("1"))
+                String[] paramametros = informacion[j].Split(',');
+                if (paramametros[0].Equals("1"))
                 {
                     calculoPeriodosSemanales();
 
                 }
-                else if (controles[j].Equals("2"))
+                else if (paramametros[0].Equals("2"))
                 {
                     periodo = 1;
                     if (mes_actual > periodo)
@@ -94,14 +70,14 @@ namespace HighCharts_Basic.Data
                         {
                             periodo++;
                         }
-                        calculoPeriodosMensuales(periodo, (int)mesAsignado[j]);
+                        calculoPeriodosMensuales(periodo, Int32.Parse(paramametros[1]));
                     }
                     else
                     {
-                        calculoPeriodosMensuales(periodo, (int)mesAsignado[j]);
+                        calculoPeriodosMensuales(periodo, Int32.Parse(paramametros[1]));
                     }
                 }
-                else if (controles[j].Equals("3"))
+                else if (paramametros[0].Equals("3"))
                 {
                     periodo = 3;
                     if (mes_actual > periodo)
@@ -110,11 +86,11 @@ namespace HighCharts_Basic.Data
                         {
                             periodo += 3;
                         }
-                        calculoPeriodosTrimestrales(periodo, (int)mesAsignado[j]);
+                        calculoPeriodosTrimestrales(periodo, Int32.Parse(paramametros[1]));
                     }
                     else
                     {
-                        calculoPeriodosTrimestrales(periodo, (int)mesAsignado[j]);
+                        calculoPeriodosTrimestrales(periodo, Int32.Parse(paramametros[1]));
                     }
                 }
 
@@ -125,13 +101,13 @@ namespace HighCharts_Basic.Data
                 cantidad100 + ";Estado +100%," + cantidadM100;
         }
 
+
         public void calculoPeriodosTrimestrales(int periodo, int mes_asignado)
         {
             int dias_mes_inicio = DateTime.DaysInMonth(anno_actual, periodo -= 2);
             int dias_mes_medio = DateTime.DaysInMonth(anno_actual, periodo += 1);
             int dias_mes_final = DateTime.DaysInMonth(anno_actual, periodo += 1);
             int total_dias = dias_mes_inicio + dias_mes_medio + dias_mes_final;
-            //DateTime fecha_inicio = new DateTime(anno_actual,periodo-2, 1);
             DateTime fecha_inicio;
             TimeSpan ts;
             int mes_inicio_trimestre = periodo -= 2;
@@ -142,7 +118,7 @@ namespace HighCharts_Basic.Data
             }
             else
             {
-                fecha_inicio = new DateTime(anno_actual, periodo -= 2, 1);
+                fecha_inicio = new DateTime(anno_actual, periodo, 1);
                 ts = fecha_actual - fecha_inicio;
             }
             int diferencia_dias = ts.Days;
@@ -153,8 +129,6 @@ namespace HighCharts_Basic.Data
         {
 
             int total_dias = DateTime.DaysInMonth(anno_actual, periodo);
-            //DateTime fecha_inicio = new DateTime(anno_actual,periodo, 1);
-            //TimeSpan ts = fecha_actual - fecha_inicio;
             DateTime fecha_inicio;
             TimeSpan ts;
             if (mes_asignado < periodo)

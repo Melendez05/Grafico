@@ -21,8 +21,8 @@ namespace HighCharts_Basic.Business
 
         public string getInformationControl()
         {
-            //return control.getInformationControl();
-            return control.informacionGrafico();
+            return control.getInformationControl();
+            //return control.informacionGrafico();
         }
 
     }
